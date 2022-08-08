@@ -1,5 +1,6 @@
-from resources.auth import RegisterResource
+from resources.auth import SignUpVehicleOwnerResource, SignUpMechanicResource
 
 routes = (
-    (RegisterResource, "/register/"),
+    (SignUpVehicleOwnerResource, "/sign_up/vehicle_owner/"),
+    (SignUpMechanicResource, "/sign_up/mechanic/"),
 )

@@ -3,7 +3,7 @@ import enum
 
 class UserRole(enum.Enum):
     mechanic = "mechanic"
-    owner = "owner"
+    vehicle_owner = "vehicle_owner"
     admin = "admin"
 
 

@@ -12,3 +12,4 @@ class RepairModel(db.Model):
     photo_url = db.Column(db.String(255), nullable=False)
     vehicle_id = db.Column(db.Integer, db.ForeignKey("vehicle.id"), nullable=False)
     vehicle = db.relationship("VehicleModel")
+

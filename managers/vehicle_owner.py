@@ -7,7 +7,7 @@ from models import VehicleOwnerModel
 
 class VehicleOwnerManager:
     @staticmethod
-    def register(user_data):
+    def sign_up(user_data):
         user_data["password"] = generate_password_hash(user_data["password"])
         user = VehicleOwnerModel(**user_data)
         db.session.add(user)
