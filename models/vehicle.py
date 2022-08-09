@@ -7,7 +7,7 @@ from models.enums import VehicleType
 class VehicleModel(db.Model):
     __tablename__ = "vehicle"
 
-    # TODO not finished the model
+    # TODO not finished the model. Should add repairs relaiton here
     id = db.Column(db.Integer, primary_key=True)
     vehicle_type = db.Column(db.Enum(VehicleType), nullable=False)
     model = db.Column(db.String, nullable=False)

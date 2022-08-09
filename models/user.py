@@ -10,6 +10,7 @@ class BaseUserModel(db.Model):
     password = db.Column(db.String(255), nullable=False)
 
 
+# TODO should on delete cascade
 vehicle_owner_mechanic = db.Table(
     "owner_mechanic",
     db.Column("vehicle_owner_id", db.Integer, db.ForeignKey("vehicle_owner.id")),

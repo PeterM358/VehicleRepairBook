@@ -6,6 +6,8 @@ from flask_httpauth import HTTPTokenAuth
 from jwt import ExpiredSignatureError, InvalidTokenError
 from werkzeug.exceptions import BadRequest, Unauthorized
 
+from models import VehicleOwnerModel, MechanicModel
+
 
 class AuthManager:
     @staticmethod
@@ -31,6 +33,9 @@ auth = HTTPTokenAuth(scheme="Bearer")
 @auth.verify_token
 def verify_token(token):
     try:
-        pass
+        user_id = AuthManager.decode_token(token)
+        v = VehicleOwnerModel.query.filter_by(id=user_id).first()
+        m = MechanicModel.query.filter_by(id=user_id).first()
+        return v or m
     except Exception as ex:
         raise Unauthorized("Invalid or missing token")

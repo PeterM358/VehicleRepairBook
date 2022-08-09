@@ -1,4 +1,5 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.exceptions import BadRequest
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import db
 from managers.auth import AuthManager
@@ -14,5 +15,11 @@ class VehicleOwnerManager:
         return AuthManager.encode_token(user)
 
     @staticmethod
-    def login(login_data):
-        pass
+    def sign_in(login_data):
+        vehicle_owner = VehicleOwnerModel.query.filter_by(email=login_data["email"]).first()
+        if not vehicle_owner:
+            raise BadRequest("No such email.Please sign up")
+
+        if check_password_hash(vehicle_owner.password, login_data["password"]):
+            return AuthManager.encode_token(vehicle_owner)
+        raise BadRequest("Wrong credentials!")

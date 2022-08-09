@@ -1,6 +1,10 @@
-from resources.auth import SignUpVehicleOwnerResource, SignUpMechanicResource
+from resources.auth import MechanicSignInResource, VehicleOwnerSignUpResource, MechanicSignUpResource, VehicleOwnerSignInResource
+from resources.vehicle import VehicleCreateResource
 
 routes = (
-    (SignUpVehicleOwnerResource, "/sign_up/vehicle_owner/"),
-    (SignUpMechanicResource, "/sign_up/mechanic/"),
+    (VehicleOwnerSignUpResource, "/vehicle_owner/sign_up/"),
+    (VehicleOwnerSignInResource, "/vehicle_owner/sign_in/"),
+    (MechanicSignUpResource, "/mechanic/sign_up/"),
+    (MechanicSignInResource, "/mechanic/sign_in/"),
+    (VehicleCreateResource, "/vehicle/create/"),
 )
