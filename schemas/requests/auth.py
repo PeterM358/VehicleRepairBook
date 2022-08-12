@@ -15,3 +15,6 @@ class VehicleOwnerSignInRequestSchema(AuthBase):
 class MechanicSignUpRequestSchema(AuthBase):
     company_name = fields.Str(required=True, min_length=1, max_length=50)
 
+
+class MechanicSignInRequestSchema(AuthBase):
+    pass

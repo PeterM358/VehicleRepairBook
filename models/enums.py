@@ -17,9 +17,3 @@ class RepairStatus(enum.Enum):
 class RepairType(enum.Enum):
     tires = "tires"
     pass
-
-
-class VehicleType(enum.Enum):
-    car = "car"
-    truck = "truck"
-    motorcycle = "motorcycle"

@@ -8,4 +8,6 @@ class VehicleManager:
         data["vehicle_owner_id"] = user.id
         vehicle = VehicleModel(**data)
         db.session.add(vehicle)
-        return 201
+        db.session.flush()
+        return vehicle
+

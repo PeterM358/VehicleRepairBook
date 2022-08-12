@@ -23,7 +23,7 @@ class VehicleOwnerModel(BaseUserModel):
 
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
-    vehicles = db.relationship("VehicleModel", back_populates="vehicle_owner", lazy="dynamic")
+    # vehicles = db.relationship("VehicleModel", backref="vehicle_owner", lazy="dynamic")
     role = db.Column(db.Enum(UserRole), default=UserRole.vehicle_owner, nullable=False)
 
 
