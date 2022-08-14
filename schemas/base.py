@@ -1,9 +1,6 @@
 from marshmallow import fields, Schema
 
 
-
-
-
 # TODO add validators
 
 
@@ -16,4 +13,3 @@ class VehicleBase(Schema):
     vehicle_type = fields.Str(required=True)
     model = fields.Str(required=True)
     year_of_registration = fields.Int(required=True)
-
