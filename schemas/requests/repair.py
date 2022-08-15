@@ -6,3 +6,7 @@ class RepairRequestSchema(Schema):
     description = fields.String(required=True)
     photo = fields.String(required=True)
     extension = fields.String(required=True)
+
+
+class RepairGetByIdSchema(Schema):
+    pass

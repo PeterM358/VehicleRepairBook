@@ -3,10 +3,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import db
 from managers.auth import AuthManager
+from managers.repair import RepairManager
 from models import MechanicModel
 
 
 class MechanicManager:
+
+    @staticmethod
+    def get_mechanics():
+        return MechanicModel.query.all()
+
     @staticmethod
     def sign_up(user_data):
         user_data["password"] = generate_password_hash(user_data["password"])
