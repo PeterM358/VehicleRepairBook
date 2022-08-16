@@ -1,7 +1,5 @@
 from db import db
 
-
-# TODO insert vehicle.id relation
 from models.enums import RepairStatus
 
 

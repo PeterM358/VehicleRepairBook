@@ -1,6 +1,8 @@
 import os.path
 import uuid
 
+from werkzeug.exceptions import NotFound
+
 from constants.common import TEMP_DIR
 from db import db
 from models import RepairModel
@@ -23,7 +25,10 @@ class RepairManager:
     # TODO May be dont need this/ is front end querying the all repairs object get_repairs?
     @staticmethod
     def get_repair_by_id(repair_id):
-        return RepairModel.query.filter_by(id=repair_id)
+        repair = RepairModel.query.filter_by(id=repair_id).first()
+        if not repair:
+            raise NotFound("This repair is missing")
+        return repair
 
     @staticmethod
     def create(data, vehicle_id):

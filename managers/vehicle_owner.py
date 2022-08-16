@@ -23,3 +23,6 @@ class VehicleOwnerManager:
         if check_password_hash(vehicle_owner.password, login_data["password"]):
             return AuthManager.encode_token(vehicle_owner)
         raise BadRequest("Wrong credentials!")
+
+    def accept_offer(self):
+        pass

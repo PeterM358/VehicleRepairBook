@@ -10,6 +10,7 @@ from utils.decorators import permission_required, validate_schema
 
 
 class RepairResource(Resource):
+    # id is vehicle_id
     @auth.login_required
     @permission_required(UserRole.vehicle_owner)
     @validate_schema(RepairRequestSchema)
@@ -44,5 +45,5 @@ class RepairGetByIdResource(Resource):
 
     def get(self, id):
         repair = RepairManager.get_repair_by_id(id)
-        return RepairResponseSchema().dump(repair, many=True), 200
+        return RepairResponseSchema().dump(repair), 200
 
