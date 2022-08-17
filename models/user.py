@@ -2,6 +2,7 @@ from db import db
 from models.enums import UserRole
 
 
+# TODO add created_on and updated_pn vars
 class BaseUserModel(db.Model):
     __abstract__ = True
 
@@ -13,8 +14,9 @@ class BaseUserModel(db.Model):
 # TODO should on delete cascade
 vehicle_owner_mechanic = db.Table(
     "owner_mechanic",
+    db.Model.metadata,
     db.Column("vehicle_owner_id", db.Integer, db.ForeignKey("vehicle_owner.id")),
-    db.Column("mechanic", db.Integer, db.ForeignKey("mechanic.id"))
+    db.Column("mechanic_id", db.Integer, db.ForeignKey("mechanic.id"), )
 )
 
 
@@ -23,7 +25,7 @@ class VehicleOwnerModel(BaseUserModel):
 
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
-    # vehicles = db.relationship("VehicleModel", backref="vehicle_owner", lazy="dynamic")
+    mechanics = db.relationship("MechanicModel", secondary=vehicle_owner_mechanic)
     role = db.Column(db.Enum(UserRole), default=UserRole.vehicle_owner, nullable=False)
 
 

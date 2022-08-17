@@ -19,6 +19,7 @@ class RepairResource(Resource):
         new_repair = RepairManager.create(data, id)
         return RepairResponseSchema().dump(new_repair), 201
 
+    # TODO check user owning the vehicle
     @auth.login_required
     def get(self, id):
         repair = RepairManager.get(id)
@@ -26,7 +27,7 @@ class RepairResource(Resource):
 
 
 class RepairDeleteResource(Resource):
-    # TODO validate existing id
+    # TODO validate existing id, validate vehicle_owner
     @auth.login_required
     def post(self, id):
         repair = RepairManager.delete_repair(id)

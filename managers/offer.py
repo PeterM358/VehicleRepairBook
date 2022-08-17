@@ -1,7 +1,7 @@
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, Unauthorized
 
 from db import db
-from models import RepairModel, VehicleModel
+from models import RepairModel, VehicleModel, MechanicModel
 from models.enums import OfferStatus, RepairStatus
 from models.offer import OfferModel
 
@@ -29,8 +29,17 @@ class OfferManager:
         return offers
 
     @staticmethod
-    def accept_offer(offer_id):
+    def accept(offer_id, vehicle_owner):
         offer = OfferModel.query.filter_by(id=offer_id).first()
+        mechanic = MechanicModel.query.filter_by(id=offer.mechanic_id).first()
+        if not offer.vehicle_owner_id == vehicle_owner.id:
+            raise Unauthorized("You are not owner of this vehicle")
         OfferModel.query.filter_by(id=offer_id).update({"status": OfferStatus.accepted})
         RepairModel.query.filter_by(id=offer.repair_id).update({"status": RepairStatus.ongoing})
+        vehicle_owner.mechanics.append(mechanic)
+        db.session.add(vehicle_owner)
 
+    @staticmethod
+    def delete(offer_id):
+        offer = OfferModel.query.filter_by(id=offer_id).first()
+        db.session.delete(offer)

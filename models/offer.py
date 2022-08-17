@@ -12,7 +12,7 @@ class OfferModel(db.Model):
     text = db.Column(db.Text, nullable=True)
     status = db.Column(db.Enum(OfferStatus), default=OfferStatus.sent, nullable=False)
     created_on = db.Column(db.DateTime, server_default=func.now())
-    vehicle_owner_id = db.Column(db.Integer, db.ForeignKey("vehicle.id"), nullable=False)
+    vehicle_owner_id = db.Column(db.Integer, db.ForeignKey("vehicle_owner.id"), nullable=False)
     repair_id = db.Column(db.Integer, db.ForeignKey("repair.id"), nullable=False)
     repair = db.relationship("RepairModel", backref="repair")
     mechanic_id = db.Column(db.Integer, db.ForeignKey("mechanic.id"), nullable=False)

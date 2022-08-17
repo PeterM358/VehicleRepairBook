@@ -29,9 +29,19 @@ class OffersGetResource(Resource):
 
 class OfferAcceptResource(Resource):
 
+    # TODO Check vehicle belongs to owner
     @auth.login_required
     @permission_required(UserRole.vehicle_owner)
     def put(self, id):
-        OfferManager.accept_offer(id)
+        current_user = auth.current_user()
+        OfferManager.accept(id, current_user)
         return 204
 
+
+class OfferDeleteResource(Resource):
+
+    @auth.login_required
+    @permission_required(UserRole.mechanic)
+    def post(self, id):
+        OfferManager.delete(id)
+        return 204
