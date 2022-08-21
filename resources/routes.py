@@ -13,7 +13,7 @@ routes = (
     (MechanicsGetResource, "/mechanics/"),
     (VehicleCreateResource, "/vehicle/create/"),
     (RepairResource,
-     "/vehicle/<int:id>/repairs/",
+     "/vehicle/<int:id>/repair/create/",
      "/vehicle/repairs/",
      "/vehicle/repair/<int:id>/update/",
      "/vehicle/repair/<int:id>/delete/"),

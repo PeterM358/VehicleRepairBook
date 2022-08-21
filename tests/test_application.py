@@ -20,11 +20,13 @@ class TestApp(TestCase):
         data = (
             ("/offers/", "GET"),
             ("/vehicle/create/", "POST"),
-            ("/vehicle/1/repair/", "POST"),
-            ("/repair/1/delete/", "POST"),
-            ("/offer/1/create/", "POST"),
+            ("/vehicle/1/repair/create/", "POST"),
+            ("/vehicle/repairs/", "GET"),
+            ("/vehicle/repair/1/update/", "PUT"),
+            ("/vehicle/repair/1/delete/", "DELETE"),
+            ("/offer/repair/1/create/", "POST"),
             ("/offer/1/accept/", "PUT"),
-            ("/offer/1/delete/", "POST"),
+            ("/offer/1/delete/", "DELETE"),
 
         )
         resp = None
