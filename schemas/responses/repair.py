@@ -15,13 +15,13 @@ class RepairResponseSchema(Schema):
     vehicle = fields.Nested(VehicleResponseSchema)
 
 
+class RepairUpdateResponseSchema(Schema):
+    pass
+
+
 class GetAllRepairsResponseSchema(Schema):
     id = fields.Int(required=True)
     title = fields.Str(required=True)
     status = EnumField(RepairStatus, by_value=True)
-
-
-class RepairDeleteResponseSchema(Schema):
-    id = fields.Int(required=True)
 
 

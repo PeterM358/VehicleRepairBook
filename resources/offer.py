@@ -42,6 +42,6 @@ class OfferDeleteResource(Resource):
 
     @auth.login_required
     @permission_required(UserRole.mechanic)
-    def post(self, id):
+    def delete(self, id):
         OfferManager.delete(id)
-        return 204
+        return "", 204

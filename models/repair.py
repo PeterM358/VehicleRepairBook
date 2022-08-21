@@ -11,6 +11,13 @@ class RepairModel(db.Model):
     description = db.Column(db.Text, nullable=True)
     photo_url = db.Column(db.String(255), nullable=False)
     status = db.Column(db.Enum(RepairStatus), default=RepairStatus.open, nullable=False)
+    vehicle_owner_id = db.Column(db.Integer, db.ForeignKey("vehicle_owner.id"), nullable=False)
     vehicle_id = db.Column(db.Integer, db.ForeignKey("vehicle.id"), nullable=False)
     vehicle = db.relationship("VehicleModel", backref="vehicle")
-
+    mechanic_id = db.Column(db.Integer, db.ForeignKey("mechanic.id"), nullable=True)
+    offers = db.relationship(
+        "OfferModel",
+        back_populates="repair",
+        cascade="all, delete",
+        passive_deletes=True,
+    )

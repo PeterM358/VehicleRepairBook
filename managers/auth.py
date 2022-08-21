@@ -4,9 +4,11 @@ from decouple import config
 import jwt
 from flask_httpauth import HTTPTokenAuth
 from jwt import ExpiredSignatureError, InvalidTokenError
-from werkzeug.exceptions import BadRequest, Unauthorized
+from werkzeug.exceptions import Unauthorized
 
-from models import VehicleOwnerModel, MechanicModel
+# Need these imports for verify_token eval
+from models import VehicleOwnerModel
+from models import MechanicModel
 
 
 class AuthManager:
@@ -20,14 +22,13 @@ class AuthManager:
 
     @staticmethod
     def decode_token(token):
-        # TODO fix errors raises
         try:
             payload = jwt.decode(token, key=config("JWT_SECRET"), algorithms=["HS256"])
             return payload["sub"], payload["type"]
         except ExpiredSignatureError:
-            raise BadRequest("Token expired")
+            raise Unauthorized("Token expired")
         except InvalidTokenError:
-            raise BadRequest("Invalid token")
+            raise Unauthorized("Invalid token")
 
 
 auth = HTTPTokenAuth(scheme="Bearer")

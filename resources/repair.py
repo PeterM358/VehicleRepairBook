@@ -5,8 +5,8 @@ from managers.auth import auth
 from managers.repair import RepairManager
 from models import UserRole
 from schemas.requests.repair import RepairRequestSchema
-from schemas.responses.repair import RepairResponseSchema, GetAllRepairsResponseSchema, RepairDeleteResponseSchema
-from utils.decorators import permission_required, validate_schema
+from schemas.responses.repair import RepairResponseSchema, GetAllRepairsResponseSchema
+from utils.decorators import permission_required, validate_schema, validate_user_has_vehicle
 
 
 class RepairResource(Resource):
@@ -14,24 +14,33 @@ class RepairResource(Resource):
     @auth.login_required
     @permission_required(UserRole.vehicle_owner)
     @validate_schema(RepairRequestSchema)
+    @validate_user_has_vehicle()
     def post(self, id):
         data = request.get_json()
-        new_repair = RepairManager.create(data, id)
+        vehicle_owner = auth.current_user()
+        new_repair = RepairManager.create(data, id, vehicle_owner.id)
         return RepairResponseSchema().dump(new_repair), 201
 
-    # TODO check user owning the vehicle
     @auth.login_required
-    def get(self, id):
-        repair = RepairManager.get(id)
-        return RepairResponseSchema().dump(repair, many=True), 200
+    def get(self, id=None):
+        if id is None:
+            vehicle_owner = auth.current_user()
+            repair = RepairManager.get_repairs(vehicle_owner)
+            return RepairResponseSchema().dump(repair, many=True), 200
 
-
-class RepairDeleteResource(Resource):
-    # TODO validate existing id, validate vehicle_owner
     @auth.login_required
-    def post(self, id):
-        repair = RepairManager.delete_repair(id)
-        return RepairDeleteResponseSchema().dump(repair), 200
+    @permission_required(UserRole.vehicle_owner)
+    def delete(self, id):
+        vehicle_owner = auth.current_user()
+        RepairManager.delete(id, vehicle_owner)
+        return "", 204
+
+    @auth.login_required
+    def put(self, id):
+        vehicle_owner = auth.current_user()
+        data = request.get_json()
+        repair = RepairManager.update(data, id, vehicle_owner)
+        return RepairResponseSchema().dump(repair), 201
 
 
 class RepairsGetResource(Resource):
@@ -47,4 +56,3 @@ class RepairGetByIdResource(Resource):
     def get(self, id):
         repair = RepairManager.get_repair_by_id(id)
         return RepairResponseSchema().dump(repair), 200
-

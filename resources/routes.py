@@ -1,7 +1,7 @@
 from resources.auth import MechanicSignInResource, VehicleOwnerSignUpResource, MechanicSignUpResource, VehicleOwnerSignInResource
 from resources.mechanic import MechanicsGetResource
 from resources.offer import OfferResource, OffersGetResource, OfferAcceptResource, OfferDeleteResource
-from resources.repair import RepairResource, RepairsGetResource, RepairGetByIdResource, RepairDeleteResource
+from resources.repair import RepairResource, RepairsGetResource, RepairGetByIdResource
 from resources.vehicle import VehicleCreateResource
 
 
@@ -12,11 +12,14 @@ routes = (
     (MechanicSignInResource, "/mechanic/sign_in/"),
     (MechanicsGetResource, "/mechanics/"),
     (VehicleCreateResource, "/vehicle/create/"),
-    (RepairResource, "/vehicle/<int:id>/repair/"),
+    (RepairResource,
+     "/vehicle/<int:id>/repairs/",
+     "/vehicle/repairs/",
+     "/vehicle/repair/<int:id>/update/",
+     "/vehicle/repair/<int:id>/delete/"),
     (RepairGetByIdResource, "/repair/<int:id>/"),
-    (RepairDeleteResource, "/repair/<int:id>/delete/"),
     (RepairsGetResource, "/repairs/"),
-    (OfferResource, "/offer/<int:id>/create/"),
+    (OfferResource, "/offer/repair/<int:id>/create/"),
     (OffersGetResource, "/offers/"),
     (OfferAcceptResource, "/offer/<int:id>/accept/"),
     (OfferDeleteResource, "/offer/<int:id>/delete/"),

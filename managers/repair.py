@@ -1,7 +1,7 @@
 import os.path
 import uuid
 
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, Unauthorized
 
 from constants.common import TEMP_DIR
 from db import db
@@ -12,15 +12,15 @@ from utils.common import decode_file
 
 class RepairManager:
 
-    # Returns all repairs for vehicle selected by id in url
+    # Returns all repairs for vehicle selected by vehicle_owner
     @staticmethod
-    def get(vehicle_id):
-        return RepairModel.query.filter_by(vehicle_id=vehicle_id)
+    def get_repairs(vehicle_owner):
+        return RepairModel.query.filter_by(vehicle_owner_id=vehicle_owner.id)
 
     # Returns all repairs for main pages
-    @staticmethod
-    def get_repairs():
-        return RepairModel.query.all()
+    # @staticmethod
+    # def get_repairs():
+    #     return RepairModel.query.all()
 
     # TODO May be dont need this/ is front end querying the all repairs object get_repairs?
     @staticmethod
@@ -31,7 +31,7 @@ class RepairManager:
         return repair
 
     @staticmethod
-    def create(data, vehicle_id):
+    def create(data, vehicle_id, vehicle_owner_id):
         data["vehicle_id"] = vehicle_id
         extension = data.pop("extension")
         photo = data.pop("photo")
@@ -42,6 +42,7 @@ class RepairManager:
         photo_url = s3.upload_photo(path, file_name)
         try:
             data["photo_url"] = photo_url
+            data["vehicle_owner_id"] = vehicle_owner_id
             repair = RepairModel(**data)
             db.session.add(repair)
             db.session.flush()
@@ -52,7 +53,21 @@ class RepairManager:
             os.remove(path)
 
     @staticmethod
-    def delete_repair(repair_id):
+    def delete(repair_id, vehicle_owner):
         repair = RepairModel.query.filter_by(id=repair_id).first()
+        if not repair:
+            raise NotFound("This repair object is missing.")
+        if not repair.vehicle_owner_id == vehicle_owner.id:
+            raise Unauthorized("This repair belongs to another user.")
         db.session.delete(repair)
+
+    @staticmethod
+    def update(data, repair_id, vehicle_owner):
+        repair = RepairModel.query.filter_by(id=repair_id).first()
+        if not repair:
+            raise NotFound("This repair object is missing.")
+        if not repair.vehicle_owner_id == vehicle_owner.id:
+            raise Unauthorized("This repair belongs to another user.")
+        repair.title = data["title"]
+        db.session.flush()
         return repair

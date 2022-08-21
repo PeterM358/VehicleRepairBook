@@ -22,7 +22,7 @@ class VehicleOwnerSignInResource(Resource):
     def post(self):
         data = request.get_json()
         token = VehicleOwnerManager.sign_in(data)
-        return {"token": token, "role": "vehicle_owner"}
+        return {"token": token, "role": "vehicle_owner"}, 200
 
 
 class MechanicSignUpResource(Resource):
@@ -38,4 +38,4 @@ class MechanicSignInResource(Resource):
     def post(self):
         data = request.get_json()
         token = MechanicManager.sign_in(data)
-        return {"token": token, "role": "mechanic"}
+        return {"token": token, "role": "mechanic"}, 200
