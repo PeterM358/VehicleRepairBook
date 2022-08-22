@@ -22,6 +22,8 @@ class AuthManager:
 
     @staticmethod
     def decode_token(token):
+        if not token:
+            raise Unauthorized("Missing token")
         try:
             payload = jwt.decode(token, key=config("JWT_SECRET"), algorithms=["HS256"])
             return payload["sub"], payload["type"]
@@ -40,4 +42,4 @@ def verify_token(token):
         user_id, type_user = AuthManager.decode_token(token)
         return eval(f"{type_user}.query.filter_by(id={user_id}).first()")
     except Exception as ex:
-        raise Unauthorized("Invalid or missing token")
+        raise ex

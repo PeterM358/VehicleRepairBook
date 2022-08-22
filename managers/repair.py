@@ -6,6 +6,7 @@ from werkzeug.exceptions import NotFound, Unauthorized
 from constants.common import TEMP_DIR
 from db import db
 from models import RepairModel
+from models.offer import OfferModel
 from services.s3 import S3Service
 from utils.common import decode_file
 
@@ -59,6 +60,7 @@ class RepairManager:
             raise NotFound("This repair object is missing.")
         if not repair.vehicle_owner_id == vehicle_owner.id:
             raise Unauthorized("This repair belongs to another user.")
+        OfferModel.query.filter_by(repair_id=repair.id).delete()
         db.session.delete(repair)
 
     @staticmethod

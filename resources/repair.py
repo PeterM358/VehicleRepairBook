@@ -6,7 +6,7 @@ from managers.repair import RepairManager
 from models import UserRole
 from schemas.requests.repair import RepairRequestSchema
 from schemas.responses.repair import RepairResponseSchema, GetAllRepairsResponseSchema
-from utils.decorators import permission_required, validate_schema, validate_user_has_vehicle
+from utils.decorators import permission_required, validate_schema
 
 
 class RepairResource(Resource):
@@ -14,7 +14,6 @@ class RepairResource(Resource):
     @auth.login_required
     @permission_required(UserRole.vehicle_owner)
     @validate_schema(RepairRequestSchema)
-    @validate_user_has_vehicle()
     def post(self, id):
         data = request.get_json()
         vehicle_owner = auth.current_user()
