@@ -82,8 +82,8 @@ class TestApp(TestCase):
             ("/vehicle/repair/1/delete/", "DELETE"),
             ("/offer/1/accept/", "PUT")
         )
-        user = MechanicFactory()
-        token = generate_token(user)
+        mechanic = MechanicFactory()
+        token = generate_token(mechanic)
         headers = {"Authorization": f"Bearer {token}"}
         self.iterate_endpoints(
             endpoints_data, self.assert_403, {"message": "Permission denied"}, headers

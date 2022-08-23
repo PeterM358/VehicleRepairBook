@@ -28,7 +28,7 @@ class AuthManager:
             payload = jwt.decode(token, key=config("JWT_SECRET"), algorithms=["HS256"])
             return payload["sub"], payload["type"]
         except ExpiredSignatureError:
-            raise Unauthorized("Token expired")
+            raise Unauthorized("Expired token")
         except InvalidTokenError:
             raise Unauthorized("Invalid token")
 

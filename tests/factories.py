@@ -8,6 +8,9 @@ from faker_vehicle import VehicleProvider
 from db import db
 from models import VehicleOwnerModel, UserRole, MechanicModel, VehicleModel
 
+fake = Faker()
+fake.add_provider(VehicleProvider)
+
 
 class BaseFactory(factory.Factory):
 
@@ -39,19 +42,17 @@ class MechanicFactory(BaseFactory):
     id = factory.Sequence(lambda n: n)
     company_name = factory.Faker("company")
     email = factory.Faker("email")
-    phone_number = str(randint(100000, 200000))
+    phone_number = str(randint(111111, 200000))
     password = factory.Faker("password")
     role = UserRole.mechanic
 
 
 class VehicleFactory(BaseFactory):
-    fake = Faker()
-    fake.add_provider(VehicleProvider)
-
     class Meta:
         model = VehicleModel
 
     id = factory.Sequence(lambda n: n)
+    vehicle_type = fake.vehicle_category()
+    model = fake.vehicle_make_model()
     year_of_registration = randint(1800, 2022)
-    vehicle_type = factory.Faker(fake.vehicle_category())
-    model = factory.Faker(fake.vehicle_make_model())
+    vehicle_owner_id = factory.Sequence(lambda n: n)

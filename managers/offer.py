@@ -31,8 +31,8 @@ class OfferManager:
     # TODO check mechanic id working correct
     @staticmethod
     def accept(offer_id, vehicle_owner):
-        offer = OfferModel.query.filter_by(id=offer_id).first()
-        mechanic = MechanicModel.query.filter_by(id=offer.mechanic_id).first()
+        offer = OfferModel.query.get(offer_id)
+        mechanic = MechanicModel.query.get(offer.mechanic_id)
         if not offer.vehicle_owner_id == vehicle_owner.id:
             raise Unauthorized("You are not owner of this vehicle")
         OfferModel.query.filter_by(id=offer_id).update({"status": OfferStatus.accepted})
@@ -47,7 +47,7 @@ class OfferManager:
 
     @staticmethod
     def delete(offer_id):
-        offer = OfferModel.query.filter_by(id=offer_id).first()
+        offer = OfferModel.query.get(offer_id)
         if not offer:
             raise NotFound("This offer is missing or deleted")
         if not offer.status == RepairStatus.open:

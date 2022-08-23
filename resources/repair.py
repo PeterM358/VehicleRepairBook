@@ -46,7 +46,7 @@ class RepairsGetResource(Resource):
 
     @staticmethod
     def get():
-        repairs = RepairManager.get_repairs()
+        repairs = RepairManager.get_repairs_index_page()
         return GetAllRepairsResponseSchema().dump(repairs, many=True), 200
 
 
