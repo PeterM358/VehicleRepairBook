@@ -18,13 +18,16 @@ class OfferResource(Resource):
         offer = OfferManager.create(data, id, current_user)
         return OfferSchemaResponse().dump(offer), 201
 
-
-class OffersGetResource(Resource):
-
     @auth.login_required
     def get(self):
         offers = OfferManager.get_offers()
         return OfferSchemaResponse().dump(offers, many=True), 201
+
+    @auth.login_required
+    @permission_required(UserRole.mechanic)
+    def delete(self, id):
+        OfferManager.delete(id)
+        return "", 204
 
 
 class OfferAcceptResource(Resource):
@@ -36,12 +39,3 @@ class OfferAcceptResource(Resource):
         current_user = auth.current_user()
         OfferManager.accept(id, current_user)
         return 204
-
-
-class OfferDeleteResource(Resource):
-
-    @auth.login_required
-    @permission_required(UserRole.mechanic)
-    def delete(self, id):
-        OfferManager.delete(id)
-        return "", 204

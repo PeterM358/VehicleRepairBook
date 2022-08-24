@@ -1,6 +1,6 @@
 import phonenumbers
 
-from marshmallow import fields, Schema, validates, ValidationError
+from marshmallow import fields, Schema
 
 
 class AuthBase(Schema):

@@ -28,7 +28,6 @@ class OfferManager:
         offers = OfferModel.query.filter_by(status=OfferStatus.sent)
         return offers
 
-    # TODO check mechanic id working correct
     @staticmethod
     def accept(offer_id, vehicle_owner):
         offer = OfferModel.query.get(offer_id)
@@ -50,6 +49,6 @@ class OfferManager:
         offer = OfferModel.query.get(offer_id)
         if not offer:
             raise NotFound("This offer is missing or deleted")
-        if not offer.status == RepairStatus.open:
+        if not offer.status == OfferStatus.sent:
             raise Forbidden("This offer is already accepted. Please Contact vehicle owner")
         db.session.delete(offer)

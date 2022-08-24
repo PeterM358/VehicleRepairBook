@@ -1,7 +1,7 @@
 import os.path
 import uuid
 
-from werkzeug.exceptions import NotFound, Unauthorized
+from werkzeug.exceptions import NotFound
 
 from constants.common import TEMP_DIR
 from db import db
@@ -17,19 +17,6 @@ class RepairManager:
     @staticmethod
     def get_repairs(vehicle_owner):
         return RepairModel.query.filter_by(vehicle_owner_id=vehicle_owner.id)
-
-    # Returns all repairs for main page
-    @staticmethod
-    def get_repairs_index_page():
-        return RepairModel.query.all()
-
-    # TODO May be dont need this/ is front end querying the all repairs object get_repairs?
-    @staticmethod
-    def get_repair_by_id(repair_id):
-        repair = RepairModel.query.filter_by(id=repair_id).first()
-        if not repair:
-            raise NotFound("This repair is missing")
-        return repair
 
     @staticmethod
     def create(data, vehicle_id, vehicle_owner_id):
@@ -57,12 +44,8 @@ class RepairManager:
             os.remove(path)
 
     @staticmethod
-    def delete(repair_id, vehicle_owner):
+    def delete(repair_id):
         repair = RepairModel.query.get(repair_id)
-        if not repair:
-            raise NotFound(f"Repair with id:{repair_id} is missing or deleted.")
-        if not repair.vehicle_owner_id == vehicle_owner.id:
-            raise Unauthorized(f"Repair with id:{repair_id} belongs to another user.")
         s3 = S3Service()
         file_name = repair.photo_url.split("/")[-1]
         s3.delete_photo(file_name)
@@ -70,12 +53,19 @@ class RepairManager:
         db.session.delete(repair)
 
     @staticmethod
-    def update(data, repair_id, vehicle_owner):
+    def update(data, repair_id):
         repair = RepairModel.query.get(repair_id)
-        if not repair:
-            raise NotFound(f"Repair with id:{repair_id} is missing or deleted.")
-        if not repair.vehicle_owner_id == vehicle_owner.id:
-            raise Unauthorized(f"Repair with id:{repair_id} belongs to another user.")
         RepairModel.query.filter_by(id=repair_id).update(data)
         db.session.flush()
+        return repair
+
+    # Returns all repairs for main page
+    @staticmethod
+    def get_repairs_index_page():
+        return RepairModel.query.all()
+
+    # TODO May be dont need this/ is front end querying the all repairs object get_repairs?
+    @staticmethod
+    def get_repair_by_id(repair_id):
+        repair = RepairModel.query.filter_by(id=repair_id).first()
         return repair
